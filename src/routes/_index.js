@@ -8,6 +8,8 @@ const superRouter = require("./super");
 const userRouter = require("./user");
 const loginRouter = require("./login");
 const phoneRouter = require("./phone");
+const adsRouter = require("./ads");
+
 
 router.use("/category",categoryRouter);
 router.use("/product",productRouter);
@@ -16,6 +18,9 @@ router.use("/user",userRouter);
 
 router.use("/login",loginRouter);
 router.use("/phone",phoneRouter);
+
+
+router.use("/ads",adsRouter);
 
 
 module.exports = router;

@@ -3,7 +3,6 @@ let { InternalServerError, BadRequestError } = require("../utils/errors");
 let phoneModel = require("../models/phone_model");
 
 const jwt = require("../utils/jwt.js");
-y
 
 class PhoneController {
   async phone(req, res, next) {
@@ -12,6 +11,7 @@ class PhoneController {
       let Testcode = "666666";
       await phoneModel.create({ num: phone, code: Testcode });
 
+      
       return res.status(200).json({
         message: "Sent sms successfully",
       });

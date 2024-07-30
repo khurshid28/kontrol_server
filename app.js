@@ -44,7 +44,9 @@ app.use("/api/v1",router);
 
 
 
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
 
 // error handling
 app.use(errorHandler);

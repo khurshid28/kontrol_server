@@ -10,7 +10,7 @@ router.post("/create",upload("public/product/").single("image"),productControlle
 router.get("/all",productController.all);
 router.get("/:id",productController.get);
 router.get("/",productController.getbyCategoryId);
-router.delete("/delete/:id",productController.delete);
+router.delete("/:id",productController.delete);
 router.put("/:id",upload("public/product/").single("image"),productController.update);
 
 module.exports = router;
