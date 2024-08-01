@@ -9,7 +9,7 @@ let {
 class ProductController {
   async create(req, res, next) {
     try {
-      let { name_uz, name_ru, filename, category_id, price, count } = req.body;
+      let { name_uz, name_ru, filename, category_id, price, count,priceMonth,desc } = req.body;
 
       let Product = await ProductModel.create({
         name_uz,
@@ -17,6 +17,8 @@ class ProductController {
         category_id,
         price,
         count,
+        priceMonth,
+        desc,
         image: filename ? "/static/product/" + filename : undefined,
       });
 
@@ -33,7 +35,7 @@ class ProductController {
   async update(req, res, next) {
     try {
       let { id } = req.params;
-      let { name_uz, name_ru, filename, category_id, price, count } = req.body;
+      let { name_uz, name_ru, filename, category_id, price, count,priceMonth,desc } = req.body;
       let value = await ProductModel.updateOne(
         { _id: id },
         {
@@ -42,6 +44,8 @@ class ProductController {
           category_id,
           price,
           count,
+          priceMonth,
+          desc,
           image: filename ? "/static/product/" + filename : undefined,
         }
       );

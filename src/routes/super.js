@@ -3,7 +3,7 @@ const { Router } = require("express");
 
 const router = Router();
 
-let SuperController = require("../controllers/Super");
+let SuperController = require("../controllers/super");
 
 router.post("/create",SuperController.create);
 router.get("/all",SuperController.all);

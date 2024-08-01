@@ -6,6 +6,7 @@ class CategoryController {
   async create(req, res, next) {
     try {
       let { name_uz,name_ru,filename } = req.body;
+      console.log(req.body);
     
       let Category = await CategoryModel.create({
         name_uz,
