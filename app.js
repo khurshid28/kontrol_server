@@ -57,11 +57,11 @@ app.get("/api", (req, res) => res.send("KONTROL.UZ  API"));
 // all routes
 app.use("/api/v1", router);
 
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
+// app.use(
+//   helmet({
+//     crossOriginResourcePolicy: false,
+//   })
+// );
 
 // error handling
 app.use(errorHandler);
