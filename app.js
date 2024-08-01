@@ -30,10 +30,10 @@ app.use(
 );
 app.use(
   morgan("dev"),
-  // cors({
-  //   origin: "*",
-  //   methods:"GET,POST,PUT,DELETE"
-  // }),
+  cors({
+    origin: "*",
+    methods:"GET,POST,PUT,DELETE"
+  }),
   rateLimit(),
   authMiddleware
 );
