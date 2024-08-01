@@ -1,8 +1,5 @@
-
-
 const dotenv = require("dotenv");
 const path = require("path");
-
 
 dotenv.config();
 require("./src/config/db.js");
@@ -22,27 +19,34 @@ const rateLimit = require("./src/middlewares/rate-limit.js");
 const errorHandler = require("./src/middlewares/error-handler.js");
 const authMiddleware = require("./src/middlewares/authMiddleware");
 
-
 const app = express();
-
 
 // PORT
 const PORT = process.env.PORT || 3232;
 
+app.use(express.json({ limit: "20mb" }));
+app.use(
+  express.urlencoded({ extended: false, limit: "20mb", parameterLimit: 20 })
+);
+app.use(
+  morgan("dev"),
+  cors({
+    origin: "*",
+  }),
+  rateLimit(),
+  authMiddleware
+);
 
-app.use(express.json({limit: '20mb'}),);
-app.use(express.urlencoded({extended:false ,limit: '20mb',parameterLimit : 20}));
-app.use(morgan("dev"), cors(), rateLimit(),authMiddleware );
-
-
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Accept, Authorization, Content-Length, X-Requested-With');
-  if ('OPTIONS' === req.method) {
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type,Accept, Authorization, Content-Length, X-Requested-With"
+  );
+  if ("OPTIONS" === req.method) {
     res.send(200);
-  }
-  else {
+  } else {
     next();
   }
 });
@@ -50,24 +54,17 @@ app.use(function(req, res, next) {
 app.get("/api", (req, res) => res.send("KONTROL.UZ  API"));
 
 // all routes
-app.use("/api/v1",router);
+app.use("/api/v1", router);
 
-
-
-
-
-app.use(helmet({
-  // crossOriginResourcePolicy: false,
-}));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
 // error handling
 app.use(errorHandler);
 app.use(logger);
-
-
-
-
-
 
 // static
 app.use("/static", express.static(path.join(__dirname, "public")));
@@ -76,7 +73,3 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 app.listen(PORT, async () => {
   console.log(`server ready on port:${PORT}`);
 });
-
-
-
-
