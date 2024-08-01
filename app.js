@@ -30,10 +30,10 @@ app.use(
 );
 app.use(
   morgan("dev"),
-  cors({
-    origin: "*",
-    methods:"GET,POST,PUT,DELETE"
-  }),
+  // cors({
+  //   origin: "*",
+  //   methods:"GET,POST,PUT,DELETE"
+  // }),
   rateLimit(),
   authMiddleware
 );
@@ -43,9 +43,9 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
-    "Content-Type,Accept, Authorization, Content-Length, X-Requested-With"
+    "Content-Type,Accept, Authorization, Content-Length, X-Requested-With,Origin"
   );
-  if ("OPTIONS" === req.method) {
+  if ("OPTIONS" == req.method) {
     res.send(200);
   } else {
     next();
@@ -60,6 +60,8 @@ app.use("/api/v1", router);
 // app.use(
 //   helmet({
 //     crossOriginResourcePolicy: false,
+//     origin:"*",
+//     meth
 //   })
 // );
 
