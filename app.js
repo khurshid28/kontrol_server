@@ -31,7 +31,7 @@ const PORT = process.env.PORT || 3232;
 
 
 app.use(express.json({limit: '20mb'}),);
-app.use(express.urlencoded({extended:true,limit: '20mb',parameterLimit : 20}));
+app.use(express.urlencoded({extended:false ,limit: '20mb',parameterLimit : 20}));
 app.use(morgan("dev"), cors(), rateLimit(),authMiddleware );
 
 
