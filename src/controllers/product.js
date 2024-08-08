@@ -115,7 +115,7 @@ class ProductController {
   async getbyCategoryId(req, res, next) {
     try {
       let { category_id } = req.query;
-      let Product = await ProductModel.findOne({
+      let Product = await ProductModel.find({
         category_id,
       });
       if (Product) {

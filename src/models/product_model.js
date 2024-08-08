@@ -5,6 +5,7 @@ const productschema = mongoose.Schema(
     name_uz: String,
     name_ru: String,
     desc : String,
+    
     price : Number,
     priceMonth : Number,
     count : Number,
