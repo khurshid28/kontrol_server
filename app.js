@@ -76,3 +76,6 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 app.listen(PORT, async () => {
   console.log(`server ready on port:${PORT}`);
 });
+
+
+require("./src/bot/setup")
