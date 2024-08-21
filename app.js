@@ -52,10 +52,10 @@ app.use(function (req, res, next) {
   }
 });
 // testing server
-app.get("/api", (req, res) => res.send("KONTROL.UZ  API"));
+// app.get("/api", (req, res) => res.send("KONTROL.UZ  API"));
 
 // all routes
-app.use("/api/v1", router);
+app.use("/", router);
 
 // app.use(
 //   helmet({
