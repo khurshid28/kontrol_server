@@ -1,85 +1,164 @@
 const TelegramBot = require('node-telegram-bot-api');
 
-const token = process.env.BOT_TOKEN;
-
+const path = require('path');
+const fs = require('fs');
+const token = '7277333512:AAEhE0IDQezfFLoB1jWrFG3iMCy3YJdFWQs'; // O'zingizning API tokeningizni qo'ying
 const bot = new TelegramBot(token, { polling: true });
 
-const channel1Id = '-1002031134343'; // Telegram channel ID
-const channel3Id = '-1002214181486'; // Telegram channel ID
-const channel4Name = '🌍 Barcha kinolar olami 🌍';
-const channel4Id = 'https://t.me/Kinolarkanali21';
+// Admin Telegram ID sini o'rnating
+const adminId = 789670134; // Bu yerni o'zgartiring
 
-// Handle /start command
+// Videolar va ularning kodlarini saqlash uchun ob'ekt
+const videoFilePath = path.join(__dirname, "videos.json");
+
+// Bot /start komandasi bilan salomlashadi
 bot.onText(/\/start/, (msg) => {
-    const chatId = msg.chat.id;
+  const chatId = msg.chat.id;
 
-    // Replace with your channel URLs and names
-    const channel1Id = 'https://t.me/Kinolarkanali21'; // Proper URL for Telegram channel
-    const channel2Id = 'https://t.me/BMW1kanli'; // Proper URL for Telegram channel
-    const channel3Id = 'https://www.instagram.com/kinolarkanali21/'; // Proper URL for Instagram
-    const channel1Name = 'Kinolar Kanali 🌍';
-    const channel2Name = 'BMW 🌍';
-    const channel3Name = 'Intagram 🌍';
+  // Admin uchun maxsus xabar
+  if (chatId === adminId) {
+    bot.sendMessage(chatId, 'Salom, Admin! Video yuklab, sarlavha sifatida kodni kiriting.');
+    return;
+  }
 
-    // Keyboard markup
-    const keyboard = {
-        reply_markup: {
-            inline_keyboard: [
-                [{ text: channel1Name, url: `${channel1Id}` }],
-                [{ text: channel2Name, url: `${channel2Id}` }],
-                [{ text: channel3Name, url: `${channel3Id}` }],
-                [{ text: `Obuna bo'ldim ✅`, callback_data: 'check_subscriptions' }]
-            ]
-        }
-    };
-
-    // Send message with channels and button
-    bot.sendMessage(chatId, "🌍🌍 Kanallarga obuna bo'ling ✅", keyboard);
+  // Foydalanuvchiga obuna bo'lishini so'rov
+  bot.sendMessage(chatId, '✅Kanallarga obuna bo\'lishingiz kerak 🌍', {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          { text: 'Kanal 1 ⬅️', url: 'https://t.me/Kinolarkanali21' },
+        ],
+        [
+          { text: 'Kanal 2 ⬅️', url: 'https://t.me/khabibullaevdilmurod' },
+        ],
+        [
+          { text: 'Kanal 3 ⬅️', url: 'https://t.me/BMW1kanali' },
+        ],
+        [
+          { text: 'Kanal 4 ⬅️', url: 'https://t.me/kontroluz' },
+        ],
+        [
+          { text: 'Kanal 5 ⬅️', url: 'https://www.instagram.com/kinolarkanali21/' },
+        ],
+        [
+          { text: 'Kanal 6 ⬅️', url: 'https://www.instagram.com/kontroluz/' },
+        ],
+        [
+          { text: 'Obuna bo\'ldim ✅', callback_data: 'subscribed' }
+        ]
+      ]
+    }
+  });
 });
 
-// Handle button press
-bot.on('callback_query', async (query) => {
-    const chatId = query.message.chat.id;
-    const userId = query.from.id;
+// Kanalga obuna bo'lganligini tekshirish
+bot.on('callback_query', async (callbackQuery) => {
+  const chatId = callbackQuery.message.chat.id;
+  const data = callbackQuery.data;
 
-    if (query.data === 'check_subscriptions') {
-        try {
-            // Check if user is a member of the channels concurrently
-            const [member1, member3] = await Promise.all([
-                bot.getChatMember(channel1Id, userId),
-                bot.getChatMember(channel3Id, userId)
-            ]);
+  if (data === 'subscribed') {
+    try {
+      const userStatus = await bot.getChatMember('@Kinolarkanali21', chatId);
+      const userStatus2 = await bot.getChatMember('@khabibullaevdilmurod', chatId);
+      const userStatus3 = await bot.getChatMember('@BMW1kanali', chatId);
+      const userStatus4 = await bot.getChatMember('@kontroluz', chatId);
+      // const userStatus5 = await bot.getChatMember('@YOUR_NEW_CHANNEL_1', chatId);
+      // const userStatus6 = await bot.getChatMember('@YOUR_NEW_CHANNEL_2', chatId);
 
-            const isMember1 = member1.status === 'member' || member1.status === 'administrator';
-            const isMember3 = member3.status === 'member' || member3.status === 'administrator';
-
-            if (isMember1 && isMember3) {
-                // User is subscribed to both channels, send a different message or perform other actions
-                const keyboard2 = {
-                    reply_markup: {
-                        inline_keyboard: [
-                            [{ text: channel4Name, url: `${channel4Id}` }]
-                        ]
-                    }
-                };
-                await bot.sendMessage(chatId, '✅Kinoni kodini shu yerga kirib qidiruv qismiga yozing👇👇👇👇👇👇👇👇👇👇', keyboard2);
-            } else {
-                // User is not subscribed to both channels, display the original keyboard
-                const keyboard = {
-                    reply_markup: {
-                        inline_keyboard: [
-                            [{ text: 'Kinolar Kanali 🌍', url: 'https://t.me/Kinolarkanali21' }],
-                            [{ text: 'BMW 🌍', url: 'https://t.me/BMW1kanli' }],
-                            [{ text: 'Intagram 🌍', url: 'https://www.instagram.com/kinolarkanali21/' }],
-                            [{ text: `Obuna bo'ldim ✅`, callback_data: 'check_subscriptions' }]
-                        ]
-                    }
-                };
-                await bot.sendMessage(chatId, "❌ Siz kanallarga obuna bo'lmagansiz kanallarga obuna bo'ling❗", keyboard);
-            }
-        } catch (error) {
-            console.error('Error checking subscriptions:', error);
-            bot.sendMessage(chatId, "❌ Xato yuz berdi. Iltimos, keyinroq qayta urinib ko'ring.");
-        }
+      if (userStatus.status === 'member' && userStatus2.status === 'member' &&
+          userStatus3.status === 'member' && userStatus4.status === 'member') {
+        bot.sendMessage(chatId, `✅Siz kanallarga obuna bo\'lgansiz. Endi kodni yuboring: 🔍`);
+      } else {
+        bot.sendMessage(chatId, '❌ Siz barcha kanallarga obuna bo\'lmadingiz. Iltimos, avval barcha kanallarga obuna bo\'ling. /start');
+        // Qayta obuna bo'lish uchun kanallarni chiqarish
+        bot.sendMessage(chatId, '❌ Kanallarga obuna bo\'lish uchun quyidagi tugmalardan foydalaning:👇👇👇👇', {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: 'Kanal 1 ⬅️', url: 'https://t.me/Kinolarkanali21' },
+              ],
+              [
+                { text: 'Kanal 2 ⬅️', url: 'https://t.me/khabibullaevdilmurod' },
+              ],
+              [
+                { text: 'Kanal 3 ⬅️', url: 'https://t.me/BMW1kanali' },
+              ],
+              [
+                { text: 'Kanal 4 ⬅️', url: 'https://t.me/kontroluz' },
+              ],
+              [
+                { text: 'Kanal 5 ⬅️', url: 'https://www.instagram.com/kinolarkanali21/' },
+              ],
+              [
+                { text: 'Kanal 6 ⬅️', url: 'https://www.instagram.com/kontroluz/' },
+              ],
+              [
+                { text: 'Obuna bo\'ldim ✅', callback_data: 'subscribed' }
+              ]
+            ]
+          }
+        });
+      }
+    } catch (error) {
+      bot.sendMessage(chatId, 'Obuna holatini tekshirishda xato yuz berdi.');
     }
+  }
+});
+
+// Admin video yuklaydi va kodni belgilaydi
+bot.on('message', async (msg) => {
+  const chatId = msg.chat.id;
+
+  // Foydalanuvchi obuna bo'lgandan so'ng xabar yuborishi kerak
+  if (chatId !== adminId) {
+    const userStatus = await bot.getChatMember('@Kinolarkanali21', chatId);
+    const userStatus2 = await bot.getChatMember('@khabibullaevdilmurod', chatId);
+    const userStatus3 = await bot.getChatMember('@BMW1kanali', chatId);
+    const userStatus4 = await bot.getChatMember('@kontroluz', chatId);
+    // const userStatus5 = await bot.getChatMember('@YOUR_NEW_CHANNEL_1', chatId);
+    // const userStatus6 = await bot.getChatMember('@YOUR_NEW_CHANNEL_2', chatId);
+
+    if (userStatus.status !== 'member' || userStatus2.status !== 'member' ||
+        userStatus3.status !== 'member' || userStatus4.status !== 'member') {
+      bot.sendMessage(chatId, 'Siz barcha kanallarga obuna bo\'lmadingiz. Iltimos, avval barcha kanallarga obuna bo\'ling. /start');
+      return;
+    }
+  }
+
+  let content;
+  try {
+    content = JSON.parse(fs.readFileSync(videoFilePath, "utf8"));
+  } catch (err) {
+    console.error(err);
+    return;
+  }
+  console.log(content);
+
+  // Agar xabar admin tomonidan yuborilgan bo'lsa va u video bo'lsa
+  if (chatId === adminId && msg.video) {
+    const caption = msg.caption; // Kodni sarlavha sifatida qabul qilamiz
+    if (caption) {
+      let code = caption.split("||")[0];
+      let desc = caption.split("||")[1];
+      content[code] = {
+        file_id: msg.video.file_id,
+        desc
+      };
+      fs.writeFileSync(videoFilePath, JSON.stringify(content), err => {
+        if (err) {
+          console.error(err);
+        }
+      });
+      bot.sendMessage(chatId, `Video saqlandi! Kod: ${code}`);
+    } else {
+      bot.sendMessage(chatId, 'Iltimos, videoni sarlavha (caption) bilan yuboring, unda kodni yozing.');
+    }
+  }
+
+  // Foydalanuvchi tomonidan yuborilgan kodni tekshirish
+  else if (msg.text && content[msg.text.trim()]) {
+    bot.sendVideo(chatId, content[msg.text.trim()].file_id, {
+      caption: "KOD : " + msg.text.trim() + "\n" + content[msg.text.trim()].desc
+    });
+  }
 });
