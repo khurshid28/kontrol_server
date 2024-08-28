@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 
 const path = require('path');
 const fs = require('fs');
-const token = '7277333512:AAEhE0IDQezfFLoB1jWrFG3iMCy3YJdFWQs'; // O'zingizning API tokeningizni qo'ying
+const token = process.env.BOT_TOKEN; // O'zingizning API tokeningizni qo'ying
 const bot = new TelegramBot(token, { polling: true });
 
 // Admin Telegram ID sini o'rnating
