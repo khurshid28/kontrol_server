@@ -50,7 +50,7 @@ app.use(function (req, res, next) {
   } else {
     next();
   }
-// });
+});
 // testing server
 app.get("/api", (req, res) => res.send("KONTROL.UZ  API"));
 
