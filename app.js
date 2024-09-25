@@ -77,4 +77,4 @@ app.listen(PORT, async () => {
   console.log(`server ready on port:${PORT}`);
 });
 
-require("./src/bot/setup");
+// require("./src/bot/setup");
