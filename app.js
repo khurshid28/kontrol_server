@@ -32,9 +32,9 @@ app.use(
   morgan("dev"),
   cors({
     origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    methods:"GET,POST,PUT,DELETE"
   }),
-  rateLimit()
+  rateLimit(),
   // authMiddleware,
 );
 
@@ -60,8 +60,7 @@ app.use("/api/v1", router);
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
-    origin: "*",
-    meth,
+    origin:"*",
   })
 );
 
@@ -77,4 +76,5 @@ app.listen(PORT, async () => {
   console.log(`server ready on port:${PORT}`);
 });
 
-// require("./src/bot/setup");
+
+// require("./src/bot/setup")
